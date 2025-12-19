@@ -211,11 +211,14 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           <h2 class="title is-4" style="font-weight: 700;">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              We present <b>VGGT</b>, a feed-forward neural network that directly infers all key 3D attributes of a scene, including camera parameters, point maps, depth maps, and 3D point tracks, from one, a few, or hundreds of its views.
-              This approach is a step forward in 3D computer vision, where models have typically been constrained to and specialized for single tasks.
-              It is also simple and efficient, reconstructing images in under one second, and still outperforming alternatives without their post-processing utilizing visual geometry optimization techniques.
-              The network achieves state-of-the-art results in multiple 3D tasks, including camera parameter estimation, multi-view depth estimation, dense point cloud reconstruction, and point tracking.
-              We also show that using pretrained <b>VGGT</b> as a feature backbone significantly enhances  downstream tasks, such as non-rigid point tracking and feed-forward novel view synthesis. 
+              Current end-to-end multi-view 3D reconstruction methods achieve impressive results, \hl{but rely on a restrictive static assumption: the scenes is entire distractor‑free with perfect cross‑view geometry.}
+              This reliance on idealized inputs causes even the most advanced methods to fail in real-world settings, where transient distractors and occlusions present. 
+              To address this, we propose \emph{Visual Geometry Transformer in the Wild} (VGTW), an end-to-end framework for robust reconstruction from inconsistent views. 
+              At its core, we isolate and suppress distractor-affected regions while preserving the consistent components across views. 
+              Specifically, we introduce a Distractor-aware Training (DAT) strategy that separates clean features from distractor-contaminated ones in the attention mechanism while enforcing feature consistency across images. 
+              To enable this, we train the model with an auxiliary mask prediction head, using supervision from a new dataset we collected with pixel-level distractor masks. 
+              The resulting VGTW model is a feed-forward network that directly outputs clean, distractor-free point clouds. 
+              <!-- Remarkably, it requires no additional 3D supervision, remains computationally efficient, and is compatible with existing pipelines. -->
             </p>
           </div>
           <br>
