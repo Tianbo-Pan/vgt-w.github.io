@@ -376,7 +376,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           <h2 class="title is-4" style="font-weight: 700;">Qualitative Comparison</h2>
           <div class="content has-text-justified" style="align-self: flex-start;">
             <p>
-               VGGT significantly outperforms all other methods across various tasks. Please refer to our paper for quantitative results. Here we also provide a qualitative comparison with DUSt3R and other concurrent works such as Fast3R and FLARE (use the dropdown menu to switch).
+               We provide qualitative comparisons across four scenes for VGTW, VGGT, and Easi3R.
             </p>
           </div>
 
@@ -387,7 +387,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
               <div class="model-label">VGTW</div>
               <model-viewer id="modelViewerComparison1" loading="eager"
                 touch-action="pan-y" environment-image="legacy"
-                src="resources/comparison/ours/college.glb"
+                src="resources/comparison/vgtw/corner.glb"
                 zoom-sensitivity="0.2" camera-controls disable-tap min-camera-orbit="auto auto 1m"
                 max-camera-orbit="auto auto 10m" interaction-prompt="none" shadow-intensity="0" ar
                 style="width: 100%; height: 100%;  background: #ffffff;">
@@ -398,7 +398,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
               <div class="model-label">VGGT</div>
               <model-viewer id="modelViewerComparison2"loading="eager"
                 touch-action="pan-y" environment-image="legacy"
-                src="resources/comparison/dust3r/college.glb"
+                src="resources/comparison/vggt/corner.glb"
                 zoom-sensitivity="0.2" camera-controls disable-tap min-camera-orbit="auto auto 1m"
                 max-camera-orbit="auto auto 10m" interaction-prompt="none" shadow-intensity="0" ar
                 style="width: 100%; height: 100%; background: #ffffff;">
@@ -406,14 +406,10 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
             </div>
             <!-- Model 3 Viewer with Label -->
             <div class="model-wrapper-comparison">
-              <select id="comparisonBaselineSelection" class="dropdown model-label">
-                <option value="fast3r">Easi3R</option>
-                <option value="flare">FLARE</option>
-                <!-- <option value="cut3r">CUT3R</option> -->
-              </select>
+              <div class="model-label">Easi3R</div>
               <model-viewer id="modelViewerComparison3" loading="eager"
                 touch-action="pan-y" environment-image="legacy"
-                src="resources/comparison/fast3r/college.glb"
+                src="resources/comparison/easi3r/corner.glb"
                 zoom-sensitivity="0.2" camera-controls disable-tap min-camera-orbit="auto auto 1m"
                 max-camera-orbit="auto auto 10m" interaction-prompt="none" shadow-intensity="0" ar
                 style="width: 100%; height: 100%; background: #ffffff;">
@@ -422,11 +418,11 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           </div>
           <div class="hero-body" style="padding: 0;">
             <div class="content has-text-centered">
-              <div class="thumbnail-container", id="thumbnail-comparison", data-selected-name="Colosseum">                
-                <img src="resources/comparison/assets/college.png" name="college">
-                <img src="resources/comparison/assets/oil.png" name="oil">
-                <video src="resources/comparison/assets/fern.mp4" name="fern" loop playsinline muted></video>
-                <video src="resources/comparison/assets/pyramid.mp4" name="pyramid" loop playsinline muted></video>
+              <div class="thumbnail-container" id="thumbnail-comparison" data-selected-name="corner">                
+                <img src="resources/comparison/assets/college.png" name="corner">
+                <img src="resources/comparison/assets/oil.png" name="crab2">
+                <video src="resources/comparison/assets/fern.mp4" name="spot" loop playsinline muted></video>
+                <video src="resources/comparison/assets/pyramid.mp4" name="android" loop playsinline muted></video>
               </div>  
             </div>  
           </div>
@@ -527,12 +523,9 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           const modelViewer2 = document.getElementById('modelViewerComparison2');
           const modelViewer3 = document.getElementById('modelViewerComparison3');
           
-          modelViewer1.setAttribute('src', `resources/comparison/ours/${name}.glb`);
-          modelViewer2.setAttribute('src', `resources/comparison/dust3r/${name}.glb`);
-          
-          // For the third viewer, check the dropdown selection
-          const baseline = document.getElementById('comparisonBaselineSelection').value;
-          modelViewer3.setAttribute('src', `resources/comparison/${baseline}/${name}.glb`);
+          modelViewer1.setAttribute('src', `resources/comparison/vgtw/${name}.glb`);
+          modelViewer2.setAttribute('src', `resources/comparison/vggt/${name}.glb`);
+          modelViewer3.setAttribute('src', `resources/comparison/easi3r/${name}.glb`);
           
           // Reset camera positions
           [modelViewer1, modelViewer2, modelViewer3].forEach(viewer => {
@@ -566,12 +559,6 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
         });
       });
       
-      // Handle dropdown change for the third comparison model
-      document.getElementById('comparisonBaselineSelection').addEventListener('change', function() {
-        const selectedName = document.querySelector('#thumbnail-comparison .thumbnail-selected').getAttribute('name');
-        const baseline = this.value;
-        document.getElementById('modelViewerComparison3').setAttribute('src', `resources/comparison/${baseline}/${selectedName}.glb`);
-      });
     });
   </script>
 
