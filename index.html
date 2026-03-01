@@ -227,7 +227,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           <br>
 
 
-          <h2 class="title is-4" style="font-weight: 700;">Qualitative Visualization</h2>
+          <!-- <h2 class="title is-4" style="font-weight: 700;">Qualitative Visualization</h2>
           <div class="content has-text-centered">
             <p>
               Reconstruction of In-the-wild Photos/Videos with VGGT. Click on any thumbnail below to view the 3D reconstruction.
@@ -249,8 +249,6 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           <br>
           <div class="content has-text-centered">
             <div class="thumbnail-container" id="thumbnail-qualitative">
-              <!-- <img src="resources/qualitative/college.png" data-glb="resources/qualitative/college_v2.glb"> -->
-              <!-- <video src="resources/qualitative/pyramid.mp4" data-glb="resources/qualitative/pyramid.glb" loop playsinline muted></video> -->
               <video src="resources/qualitative/colosseum.mp4" data-glb="resources/qualitative/colosseum_v4.glb" loop playsinline muted></video>
               <video src="resources/qualitative/outdoor_room.mp4" data-glb="resources/qualitative/outdoor_room_v2.glb" loop playsinline muted></video>
               <video src="resources/qualitative/courtroom.mp4" data-glb="resources/qualitative/courtroom_v2.glb" loop playsinline muted></video>
@@ -370,8 +368,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
               });
             });
           </script>
-
-          <br>
+          <br> -->
 
           <h2 class="title is-4" style="font-weight: 700;">Qualitative Comparison</h2>
           <div class="content has-text-justified" style="align-self: flex-start;">
@@ -419,10 +416,10 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           <div class="hero-body" style="padding: 0;">
             <div class="content has-text-centered">
               <div class="thumbnail-container" id="thumbnail-comparison" data-selected-name="corner">                
-                <img src="resources/comparison/assets/college.png" name="corner">
-                <img src="resources/comparison/assets/oil.png" name="crab2">
-                <video src="resources/comparison/assets/fern.mp4" name="spot" loop playsinline muted></video>
-                <video src="resources/comparison/assets/pyramid.mp4" name="android" loop playsinline muted></video>
+                <video src="resources/comparison/assets/corner_input.mp4" name="corner" loop playsinline muted preload="metadata"></video>
+                <video src="resources/comparison/assets/crab2_input.mp4" name="crab2" loop playsinline muted preload="metadata"></video>
+                <video src="resources/comparison/assets/spot_input.mp4" name="spot" loop playsinline muted preload="metadata"></video>
+                <video src="resources/comparison/assets/android_input.mp4" name="android" loop playsinline muted preload="metadata"></video>
               </div>  
             </div>  
           </div>
@@ -505,7 +502,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
       });
       
       // Handle comparison thumbnails
-      const firstComparisonThumbnail = document.querySelector('#thumbnail-comparison video, #thumbnail-comparison img');
+      const firstComparisonThumbnail = document.querySelector('#thumbnail-comparison video');
       if (firstComparisonThumbnail) {
         firstComparisonThumbnail.classList.add('thumbnail-selected');
         // If it's a video, play it
@@ -514,7 +511,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
         }
       }
       
-      document.querySelectorAll('#thumbnail-comparison img, #thumbnail-comparison video').forEach(el => {
+      document.querySelectorAll('#thumbnail-comparison video').forEach(el => {
         el.addEventListener('click', () => {
           const name = el.getAttribute('name');
           
@@ -537,7 +534,7 @@ Visual Geometry Transformer in the Wild: Distractor-Free 3D Reconstruction</titl
           });
 
           // Remove selection class from all elements
-          document.querySelectorAll('#thumbnail-comparison img, #thumbnail-comparison video').forEach(element => {
+          document.querySelectorAll('#thumbnail-comparison video').forEach(element => {
             element.classList.remove('thumbnail-selected');
           });
           

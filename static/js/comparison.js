@@ -9,10 +9,10 @@ const modelViewerComparison3 = document.querySelector("model-viewer#modelViewerC
 
 // Click an image to select the case
 
-document.querySelectorAll('#thumbnail-comparison img, #thumbnail-comparison video').forEach(el => {
+document.querySelectorAll('#thumbnail-comparison video').forEach(el => {
     el.addEventListener('click', () => {
         // Remove border from all elements
-        document.querySelectorAll('#thumbnail-comparison img, #thumbnail-comparison video').forEach(element => {
+        document.querySelectorAll('#thumbnail-comparison video').forEach(element => {
             element.style.border = 'none';
         });
         
