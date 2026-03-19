@@ -1,46 +1,143 @@
-const modelViewerComparison1 = document.querySelector("model-viewer#modelViewerComparison1");
-const modelViewerComparison2 = document.querySelector("model-viewer#modelViewerComparison2");
-const modelViewerComparison3 = document.querySelector("model-viewer#modelViewerComparison3");
-// // Initialize the selection panel images
-// $('#comparisonSelectionPanel .selectable-image').each((i, img) => {
-//     img.src = `static/comparison/${img.getAttribute('name')}/image.jpg`;
-// })
+const DEFAULT_CAMERA_ORBIT = "180deg 70deg auto";
+const FIRST_FRAME_BACKOFF_SCALE = 1.4;
+const FIRST_FRAME_MIN_RADIUS_SCENE_SCALE = 0.8;
+const presetCache = new Map();
 
+function adjustFirstFramePreset(preset) {
+  if (!preset || preset.source !== "first_frame_camera" || typeof preset.camera_orbit !== "string") {
+    return preset;
+  }
 
-// Click an image to select the case
+  const parts = preset.camera_orbit.trim().split(/\s+/);
+  if (parts.length !== 3 || !parts[2].endsWith("m")) {
+    return preset;
+  }
 
-document.querySelectorAll('#thumbnail-comparison video').forEach(el => {
-    el.addEventListener('click', () => {
-        // Remove border from all elements
-        document.querySelectorAll('#thumbnail-comparison video').forEach(element => {
-            element.style.border = 'none';
-        });
-        
-        // Add border to clicked element
-        el.style.border = '6px solid #43a3f6';
+  const radius = Number.parseFloat(parts[2].slice(0, -1));
+  if (!Number.isFinite(radius)) {
+    return preset;
+  }
 
-        const name = el.getAttribute('name');
-        console.log('Selected thumbnail name:', name);
+  const sceneScale = Number.isFinite(preset.scene_scale) ? Number(preset.scene_scale) : 0;
+  const adjustedRadius = Math.max(
+    radius * FIRST_FRAME_BACKOFF_SCALE,
+    sceneScale * FIRST_FRAME_MIN_RADIUS_SCENE_SCALE
+  );
 
-        // Store the selected name as an attribute on the thumbnail-comparison container
-        document.getElementById('thumbnail-comparison').setAttribute('data-selected-name', name);
+  return {
+    ...preset,
+    original_camera_orbit: preset.camera_orbit,
+    camera_orbit: `${parts[0]} ${parts[1]} ${adjustedRadius.toFixed(6)}m`,
+    backoff_scale: FIRST_FRAME_BACKOFF_SCALE,
+    min_radius_scene_scale: FIRST_FRAME_MIN_RADIUS_SCENE_SCALE,
+  };
+}
 
-        const meshPath1 = `resources/comparison/vgtw/${name}.glb`
-        const meshPath2 = `resources/comparison/vggt/${name}.glb`
-        const meshPath3 = `resources/comparison/easi3r/${name}.glb`
+async function loadViewerPreset(glbSrc) {
+  if (!glbSrc) return null;
+  if (presetCache.has(glbSrc)) {
+    return presetCache.get(glbSrc);
+  }
 
-        modelViewerComparison1.src = meshPath1;
-        modelViewerComparison1.cameraOrbit = "180deg auto auto";
-        modelViewerComparison1.resetTurntableRotation(0);
-        modelViewerComparison1.jumpCameraToGoal();
-        modelViewerComparison2.src = meshPath2;
-        modelViewerComparison2.cameraOrbit = "180deg auto auto";
-        modelViewerComparison2.resetTurntableRotation(0);
-        modelViewerComparison2.jumpCameraToGoal();
-        modelViewerComparison3.src = meshPath3;
-        modelViewerComparison3.cameraOrbit = "180deg auto auto";
-        modelViewerComparison3.resetTurntableRotation(0);
-        modelViewerComparison3.jumpCameraToGoal();
+  const viewerJsonSrc = glbSrc.replace(/\.glb$/i, ".viewer.json");
+  const presetPromise = fetch(viewerJsonSrc, { cache: "no-cache" })
+    .then((response) => {
+      if (!response.ok) return null;
+      return response.json();
+    })
+    .then((preset) => adjustFirstFramePreset(preset))
+    .catch(() => null);
 
+  presetCache.set(glbSrc, presetPromise);
+  return presetPromise;
+}
+
+function applyViewerPreset(viewer, preset) {
+  if (!viewer) return;
+
+  viewer.cameraOrbit = preset && preset.camera_orbit ? preset.camera_orbit : DEFAULT_CAMERA_ORBIT;
+  viewer.cameraTarget = preset && preset.camera_target ? preset.camera_target : "auto auto auto";
+  viewer.fieldOfView = preset && preset.field_of_view ? preset.field_of_view : "auto";
+
+  if (typeof viewer.resetTurntableRotation === "function") {
+    viewer.resetTurntableRotation(0);
+  }
+  if (typeof viewer.jumpCameraToGoal === "function") {
+    viewer.jumpCameraToGoal();
+  }
+}
+
+async function setViewerSource(viewer, glbSrc) {
+  if (!viewer || !glbSrc) return;
+
+  const presetPromise = loadViewerPreset(glbSrc);
+  const applyWhenLoaded = async () => {
+    viewer.removeEventListener("load", applyWhenLoaded);
+    const preset = await presetPromise;
+    applyViewerPreset(viewer, preset);
+  };
+
+  viewer.addEventListener("load", applyWhenLoaded);
+  viewer.setAttribute("src", glbSrc);
+}
+
+function updateThumbnailSelection(activeThumbnail) {
+  document.querySelectorAll("#thumbnail-comparison video").forEach((element) => {
+    element.classList.remove("thumbnail-selected");
+    if (element !== activeThumbnail) {
+      element.pause();
+      element.currentTime = 0;
+    }
+  });
+
+  if (!activeThumbnail) return;
+  activeThumbnail.classList.add("thumbnail-selected");
+  activeThumbnail.play().catch(() => {});
+}
+
+function getComparisonViewers() {
+  return [
+    document.getElementById("modelViewerComparison1"),
+    document.getElementById("modelViewerComparison2"),
+    document.getElementById("modelViewerComparison3"),
+  ];
+}
+
+function setComparisonScene(name) {
+  const [viewer1, viewer2, viewer3] = getComparisonViewers();
+  if (!viewer1 || !viewer2 || !viewer3) return;
+
+  document.getElementById("thumbnail-comparison")?.setAttribute("data-selected-name", name);
+
+  setViewerSource(viewer1, `resources/comparison/vgtw/${name}.glb`);
+  setViewerSource(viewer2, `resources/comparison/vggt/${name}.glb`);
+  setViewerSource(viewer3, `resources/comparison/easi3r/${name}.glb`);
+}
+
+function initComparisonViewers() {
+  const thumbnails = Array.from(document.querySelectorAll("#thumbnail-comparison video"));
+  if (thumbnails.length === 0) return;
+
+  thumbnails.forEach((thumbnail) => {
+    thumbnail.addEventListener("click", () => {
+      const name = thumbnail.getAttribute("name");
+      if (!name) return;
+      updateThumbnailSelection(thumbnail);
+      setComparisonScene(name);
     });
+  });
+
+  const initialThumbnail =
+    thumbnails.find((thumbnail) => thumbnail.getAttribute("name") === "corner") ?? thumbnails[0];
+  updateThumbnailSelection(initialThumbnail);
+  const initialName = initialThumbnail.getAttribute("name");
+  if (initialName) {
+    setComparisonScene(initialName);
+  }
+}
+
+window.initComparisonViewers = initComparisonViewers;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initComparisonViewers();
 });

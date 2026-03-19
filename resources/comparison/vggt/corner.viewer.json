@@ -1,0 +1,18 @@
+{
+  "source": "first_frame_camera",
+  "camera_target": "-0.005492m -0.005489m 1.018692m",
+  "camera_orbit": "179.691073deg 89.691302deg 1.018697m",
+  "field_of_view": "52.760573deg",
+  "camera_position": [
+    7.41080855807142e-10,
+    1.2817199249512542e-09,
+    2.3720053944936337e-05
+  ],
+  "target_point": [
+    -0.005492496236451427,
+    -0.005488502133199374,
+    1.0186915967633317
+  ],
+  "scene_scale": 1.4986324852499016,
+  "note": "Approximate first-frame view. Camera roll is not represented by model-viewer."
+}
