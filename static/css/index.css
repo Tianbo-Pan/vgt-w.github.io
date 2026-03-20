@@ -446,3 +446,25 @@ pre {
     height: 88px;
   }
 }
+
+
+.teaser-image-card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.method-figure-card {
+  max-width: 920px;
+  margin: 1.25rem auto 0;
+}
+
+.experiment-table th,
+.experiment-table td {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.experiment-table th:first-child,
+.experiment-table td:first-child {
+  text-align: left;
+}
