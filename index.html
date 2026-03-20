@@ -113,10 +113,10 @@
   </section>
 
   <section class="section" id="method">
-    <div class="container is-max-desktop">
+    <div class="container is-max-widescreen method-section-container">
       <h2 class="title is-4 section-title has-text-centered">Method Overview</h2>
       <div class="columns is-centered">
-        <div class="column is-10-desktop is-12-tablet">
+        <div class="column is-12">
           <div class="content has-text-justified section-copy">
             <p>
               VGTW builds on the feed-forward geometry prediction pipeline and introduces a distractor-aware training strategy tailored for inconsistent image collections. Image tokens interact through frame-wise and global attention, while DAT explicitly discourages distractor leakage and preserves consistent geometry.
@@ -140,6 +140,7 @@
             <thead>
               <tr>
                 <th rowspan="2">Method</th>
+                <th rowspan="2">Processing</th>
                 <th colspan="3">Low Occlusion</th>
                 <th colspan="3">Medium Occlusion</th>
                 <th colspan="3">High Occlusion</th>
@@ -163,21 +164,23 @@
             <tbody>
               <tr>
                 <td>DUSt3R</td>
+                <td>Pair-wise</td>
                 <td>0.043</td>
                 <td>0.035</td>
                 <td>0.682</td>
                 <td>0.044</td>
                 <td>0.102</td>
-                <td><strong>0.763</strong></td>
+                <td>0.763</td>
                 <td>0.026</td>
                 <td>0.102</td>
-                <td><strong>0.798</strong></td>
+                <td>0.798</td>
                 <td>0.037</td>
                 <td>0.080</td>
-                <td><strong>0.747</strong></td>
+                <td>0.747</td>
               </tr>
               <tr>
                 <td>MaSt3R</td>
+                <td>Pair-wise</td>
                 <td>0.044</td>
                 <td>0.120</td>
                 <td>0.636</td>
@@ -193,6 +196,7 @@
               </tr>
               <tr>
                 <td>Fast3R</td>
+                <td>Multi-image</td>
                 <td>0.037</td>
                 <td>0.049</td>
                 <td>0.639</td>
@@ -208,6 +212,7 @@
               </tr>
               <tr>
                 <td>VGGT</td>
+                <td>Multi-image</td>
                 <td>0.040</td>
                 <td>0.057</td>
                 <td>0.663</td>
@@ -222,13 +227,14 @@
                 <td>0.640</td>
               </tr>
               <tr class="row-highlight">
-                <td>VGTW<sub>VGGT</sub></td>
+                <td>VGTW(VGGT)</td>
+                <td>Multi-image</td>
                 <td>0.033</td>
                 <td><strong>0.029</strong></td>
                 <td>0.695</td>
                 <td>0.041</td>
                 <td>0.095</td>
-                <td>0.724</td>
+                <td><strong>0.724</strong></td>
                 <td>0.025</td>
                 <td>0.228</td>
                 <td>0.693</td>
@@ -238,6 +244,7 @@
               </tr>
               <tr>
                 <td>&pi;<sup>3</sup></td>
+                <td>Multi-image</td>
                 <td>0.034</td>
                 <td>0.051</td>
                 <td><strong>0.699</strong></td>
@@ -246,13 +253,14 @@
                 <td>0.676</td>
                 <td>0.036</td>
                 <td>0.078</td>
-                <td>0.753</td>
+                <td><strong>0.753</strong></td>
                 <td>0.051</td>
                 <td>0.074</td>
-                <td>0.709</td>
+                <td><strong>0.709</strong></td>
               </tr>
               <tr class="row-highlight row-highlight--strong">
                 <td>VGTW(&pi;<sup>3</sup>)</td>
+                <td>Multi-image</td>
                 <td><strong>0.028</strong></td>
                 <td>0.033</td>
                 <td>0.625</td>

@@ -453,8 +453,13 @@ pre {
   margin: 0 auto;
 }
 
+.method-section-container {
+  max-width: 1400px !important;
+}
+
 .method-figure-card {
-  max-width: 920px;
+  width: 100%;
+  max-width: none;
   margin: 1.25rem auto 0;
 }
 
@@ -467,4 +472,14 @@ pre {
 .experiment-table th:first-child,
 .experiment-table td:first-child {
   text-align: left;
+}
+
+.experiment-table th:nth-child(2),
+.experiment-table td:nth-child(2) {
+  text-align: center;
+}
+
+.experiment-table td:nth-child(2) {
+  font-weight: 600;
+  color: #475569;
 }
