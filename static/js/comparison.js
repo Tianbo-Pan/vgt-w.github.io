@@ -1,9 +1,17 @@
 const DEFAULT_CAMERA_ORBIT = "180deg 70deg auto";
-const FIRST_FRAME_BACKOFF_SCALE = 1.4;
+const FIRST_FRAME_BACKOFF_SCALE_DEFAULT = 5;
+const FIRST_FRAME_BACKOFF_SCALE_EASI3R = 2;
 const FIRST_FRAME_MIN_RADIUS_SCENE_SCALE = 0.8;
 const presetCache = new Map();
 
-function adjustFirstFramePreset(preset) {
+function getFirstFrameBackoffScale(glbSrc) {
+  if (typeof glbSrc === "string" && /\/easi3r\//i.test(glbSrc)) {
+    return FIRST_FRAME_BACKOFF_SCALE_EASI3R;
+  }
+  return FIRST_FRAME_BACKOFF_SCALE_DEFAULT;
+}
+
+function adjustFirstFramePreset(preset, glbSrc) {
   if (!preset || preset.source !== "first_frame_camera" || typeof preset.camera_orbit !== "string") {
     return preset;
   }
@@ -19,8 +27,9 @@ function adjustFirstFramePreset(preset) {
   }
 
   const sceneScale = Number.isFinite(preset.scene_scale) ? Number(preset.scene_scale) : 0;
+  const backoffScale = getFirstFrameBackoffScale(glbSrc);
   const adjustedRadius = Math.max(
-    radius * FIRST_FRAME_BACKOFF_SCALE,
+    radius * backoffScale,
     sceneScale * FIRST_FRAME_MIN_RADIUS_SCENE_SCALE
   );
 
@@ -28,7 +37,7 @@ function adjustFirstFramePreset(preset) {
     ...preset,
     original_camera_orbit: preset.camera_orbit,
     camera_orbit: `${parts[0]} ${parts[1]} ${adjustedRadius.toFixed(6)}m`,
-    backoff_scale: FIRST_FRAME_BACKOFF_SCALE,
+    backoff_scale: backoffScale,
     min_radius_scene_scale: FIRST_FRAME_MIN_RADIUS_SCENE_SCALE,
   };
 }
@@ -45,7 +54,7 @@ async function loadViewerPreset(glbSrc) {
       if (!response.ok) return null;
       return response.json();
     })
-    .then((preset) => adjustFirstFramePreset(preset))
+    .then((preset) => adjustFirstFramePreset(preset, glbSrc))
     .catch(() => null);
 
   presetCache.set(glbSrc, presetPromise);
