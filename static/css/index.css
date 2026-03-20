@@ -454,12 +454,12 @@ pre {
 }
 
 .method-section-container {
-  max-width: 1400px !important;
+  max-width: 960px !important;
 }
 
 .method-figure-card {
   width: 100%;
-  max-width: none;
+  max-width: 900px;
   margin: 1.25rem auto 0;
 }
 
